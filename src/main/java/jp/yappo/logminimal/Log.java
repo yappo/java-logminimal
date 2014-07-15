@@ -12,7 +12,7 @@ public class Log {
 		logger = newLogger;
 	}
 
-	static public void setDefaultLogger() {
+	static public void setLogger() {
 		logger = defaultLogger;
 	}	
 	
