@@ -1,5 +1,7 @@
 package jp.yappo.logminimal;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 
 public class Log {
@@ -65,9 +67,50 @@ public class Log {
 			(minute < 10 ? "0" + minute : minute) + ":" +
 			(second < 10 ? "0" + second : second);
 	
-		logger.print(date, type, message, message, new Throwable().getStackTrace()[2].toString());
+		String stack;
+		try {
+			stack = getStackTrace(2).toString();
+		} catch (LogCallerException e) {
+			stack = "(getStackTrace caught exception: " + e.getMessage() + ")";
+		}
+		logger.print(date, type, message, message, stack);
 	}
-	
+
+	// get stackTrace
+	// getStackTraceElement is 5x faster than Throwable().getStackTrace()
+	static private boolean getStackTraceElementInitialize = false;
+	static private Method getStackTraceElement = null;
+	static private StackTraceElement getStackTrace (int stack) throws LogCallerException {
+		stack++;
+		if (getStackTraceElementInitialize == false) {
+			try {
+				getStackTraceElement = Throwable.class.getDeclaredMethod("getStackTraceElement", int.class);
+				getStackTraceElement.setAccessible(true);
+			} catch (NoSuchMethodException e) {
+				getStackTraceElement = null;
+			}
+			getStackTraceElementInitialize = true;
+		}
+
+		if (getStackTraceElement == null) {
+			return new Throwable().getStackTrace()[stack];
+		} else {
+			try {
+				return (StackTraceElement) getStackTraceElement.invoke(new Throwable(), stack);
+			} catch (IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				throw new LogCallerException(e);
+			}
+		}
+	}
+
+	static private class LogCallerException extends Exception {
+		private static final long serialVersionUID = 2676683947539341764L;
+		private LogCallerException(Exception e) {
+			super(e);
+		}
+	}
+
 	@FunctionalInterface
 	interface Logger {
 		public void print(String time, String type, String message, String rawMessage, String trace);
