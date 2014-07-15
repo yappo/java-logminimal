@@ -59,7 +59,7 @@ public class Log {
 		int hour   = currentCalendar.get(Calendar.HOUR_OF_DAY);
 		int minute = currentCalendar.get(Calendar.MINUTE);
 		int second = currentCalendar.get(Calendar.SECOND);
-		// no use String.format because String.format is too slow. 
+		// not use String.format because String.format is too slow.
 		String date = year + "/" +
 			(month  < 10 ? "0" + month  : month)  + "/" +
 			(day    < 10 ? "0" + day    : day)   + " " +
