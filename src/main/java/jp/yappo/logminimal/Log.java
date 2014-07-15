@@ -54,7 +54,7 @@ public class Log {
 		Calendar currentCalendar = testCalendar == null ? Calendar.getInstance() : testCalendar; 
 
 		int year   = currentCalendar.get(Calendar.YEAR);
-		int month  = currentCalendar.get(Calendar.MONTH);
+		int month  = currentCalendar.get(Calendar.MONTH) + 1; // Calendar.MONTH starts at 0
 		int day    = currentCalendar.get(Calendar.DAY_OF_MONTH);
 		int hour   = currentCalendar.get(Calendar.HOUR_OF_DAY);
 		int minute = currentCalendar.get(Calendar.MINUTE);

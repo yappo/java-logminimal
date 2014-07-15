@@ -14,7 +14,7 @@ public class LogTest {
 	@Test
 	public void test() {
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(2014, 6, 9, 18, 19, 20);
+		calendar.set(2014, Calendar.JUNE, 9, 18, 19, 20);
 		Log.setTestCalendar(calendar);
 
 		Log.setLogger((time, type, message, rawMessage, trace) -> {
@@ -30,7 +30,7 @@ public class LogTest {
 		debugf("foo");
 		assertEquals(LogTest.logResult, "[2014/06/09 18:19:20] [DEBUG] foo at jp.yappo.logminimal.LogTest.test(LogTest.java:30)");
 
-		calendar.set(2014, 6, 10, 18, 19, 20);
+		calendar.set(2014, Calendar.JUNE, 10, 18, 19, 20);
 		Log.setTestCalendar(calendar);
 		critf("%s %04d", "log", 1);
 		assertEquals(LogTest.logResult, "[2014/06/10 18:19:20] [CRITICAL] log 0001 at jp.yappo.logminimal.LogTest.test(LogTest.java:35)");
