@@ -67,13 +67,40 @@ public class Log {
 			(minute < 10 ? "0" + minute : minute) + ":" +
 			(second < 10 ? "0" + second : second);
 	
+		// white space escape
+		StringBuilder escapedMessage = new StringBuilder();
+		for (int i = 0; i < message.length(); i++) {
+			char c = message.charAt(i);
+			switch (c) {
+				case '\r': {
+					escapedMessage.append('\\');
+					escapedMessage.append('r');
+					break;
+				}
+				case '\n': {
+					escapedMessage.append('\\');
+					escapedMessage.append('n');
+					break;
+				}
+				case '\t': {
+					escapedMessage.append('\\');
+					escapedMessage.append('t');
+					break;
+				}
+				default: {
+					escapedMessage.append(c);
+					break;
+				}
+			}
+		}
+
 		String stack;
 		try {
 			stack = getStackTrace(2).toString();
 		} catch (LogCallerException e) {
 			stack = "(getStackTrace caught exception: " + e.getMessage() + ")";
 		}
-		logger.print(date, type, message, message, stack);
+		logger.print(date, type, escapedMessage.toString(), message, stack);
 	}
 
 	// get stackTrace

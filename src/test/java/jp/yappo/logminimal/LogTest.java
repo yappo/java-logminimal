@@ -41,6 +41,9 @@ public class LogTest {
 		debugf("%s %04d", "log", 1);
 		assertEquals(LogTest.logResult, "[2014/06/10 18:19:20] [DEBUG] log 0001 at jp.yappo.logminimal.LogTest.test(LogTest.java:41)");
 
+		critf("foo\nbar\rbaz\tblha");
+		assertEquals(LogTest.logResult, "[2014/06/10 18:19:20] [CRITICAL] foo\\nbar\\rbaz\\tblha at jp.yappo.logminimal.LogTest.test(LogTest.java:44)");
+
 		/*
 		long startTime = System.nanoTime();
 		for (int i = 0; i < 10000; i++) {
